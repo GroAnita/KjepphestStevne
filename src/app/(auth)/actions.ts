@@ -94,6 +94,69 @@ export async function signUp(
   };
 }
 
+export async function requestPasswordReset(
+  _prev: AuthState,
+  formData: FormData,
+): Promise<AuthState> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) {
+    return { error: "Fyll inn e-posten din." };
+  }
+
+  const origin = (await headers()).get("origin");
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: origin
+      ? `${origin}/auth/confirm?next=/reset-password`
+      : undefined,
+  });
+  if (error && error.code?.startsWith("over_")) {
+    return { error: friendlyError(error), email };
+  }
+
+  // Same answer whether or not the account exists, so nobody can use this
+  // form to find out who is registered.
+  return {
+    success: `Hvis det finnes en konto for ${email}, har vi sendt en e-post med en lenke. Trykk på den for å lage et nytt passord.`,
+  };
+}
+
+export async function updatePassword(
+  _prev: AuthState,
+  formData: FormData,
+): Promise<AuthState> {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  if (password.length < 6) {
+    return { error: "Passordet må ha minst 6 tegn." };
+  }
+  if (password !== confirm) {
+    return { error: "Passordene er ikke like. Prøv igjen!" };
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) {
+    return {
+      error:
+        "Lenken er for gammel, eller den ble åpnet i en annen nettleser. Be om en ny lenke.",
+    };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    return {
+      error:
+        error.code === "same_password"
+          ? "Det nye passordet må være forskjellig fra det gamle."
+          : friendlyError(error),
+    };
+  }
+
+  return { success: "Hurra! Du har fått nytt passord og er logget inn." };
+}
+
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();

@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Field, Notice, PasswordField, SubmitButton } from "@/components/FormBits";
 import { signIn, type AuthState } from "../actions";
@@ -36,6 +37,12 @@ export function LoginForm() {
         name="password"
         autoComplete="current-password"
       />
+      <Link
+        href="/forgot-password"
+        className="-mt-2 self-end text-sm font-bold text-berry underline"
+      >
+        Glemt passord?
+      </Link>
       <SubmitButton pending={pending} pendingText="Galopperer inn …">
         Logg inn
       </SubmitButton>
