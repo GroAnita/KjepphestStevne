@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <clipPath id="badge"><circle cx="100" cy="100" r="100"/></clipPath>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="#ffd9e8"/>
+  <g clip-path="url(#badge)" stroke="#4b2c55" stroke-linejoin="round" transform="translate(-8 14)">
+    <!-- Stick -->
+    <path d="M74 140 L46 240" stroke-width="18" stroke-linecap="round"/>
+    <path d="M74 140 L46 240" stroke="#c98b5a" stroke-width="10" stroke-linecap="round"/>
+    <!-- Mane -->
+    <g stroke-width="5">
+      <circle cx="82" cy="36" r="13" fill="#ff7eb6"/>
+      <circle cx="68" cy="47" r="13" fill="#b9a1ff"/>
+      <circle cx="58" cy="63" r="13" fill="#ff7eb6"/>
+      <circle cx="52" cy="81" r="13" fill="#b9a1ff"/>
+      <circle cx="50" cy="99" r="13" fill="#ff7eb6"/>
+      <circle cx="51" cy="117" r="13" fill="#b9a1ff"/>
+      <circle cx="56" cy="134" r="13" fill="#ff7eb6"/>
+    </g>
+    <!-- Ear -->
+    <path d="M88 46 L96 14 L112 40 Z" fill="#fff" stroke-width="5"/>
+    <!-- Head -->
+    <path d="M60 144 C 52 112, 54 76, 74 52 C 90 34, 114 32, 132 46 C 150 60, 164 78, 172 96 C 178 112, 171 127, 156 128 C 142 129, 128 122, 117 120 C 110 133, 105 141, 99 149 C 86 157, 68 156, 60 144 Z" fill="#fff" stroke-width="5"/>
+    <circle cx="104" cy="45" r="10" fill="#ff7eb6" stroke-width="5"/>
+    <!-- Face -->
+    <circle cx="124" cy="72" r="9" fill="#4b2c55" stroke="none"/>
+    <circle cx="127" cy="68.5" r="3" fill="#fff" stroke="none"/>
+    <ellipse cx="134" cy="90" rx="10" ry="6" fill="#ff7eb6" opacity="0.5" stroke="none"/>
+    <ellipse cx="162" cy="104" rx="3.5" ry="4.5" fill="#4b2c55" stroke="none"/>
+    <path d="M146 117 Q 155 122 162 116" fill="none" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Bow -->
+    <path d="M76 150 L58 140 L60 162 Z M76 150 L94 140 L92 162 Z" fill="#e0457f" stroke-width="4"/>
+    <circle cx="76" cy="151" r="5.5" fill="#e0457f" stroke-width="4"/>
+  </g>
+</svg>

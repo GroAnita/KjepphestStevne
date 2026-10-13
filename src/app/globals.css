@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fff8f3;
+  --color-blush: #ffd9e8;
+  --color-bubblegum: #ff7eb6;
+  --color-berry: #e0457f;
+  --color-lilac: #b9a1ff;
+  --color-lilac-soft: #ece4ff;
+  --color-mint: #7fdcc4;
+  --color-mint-soft: #dcf7ef;
+  --color-sunny: #ffd36e;
+  --color-hay: #c98b5a;
+  --color-plum: #4b2c55;
+  --color-plum-soft: #7d6386;
+
+  --animate-bob: bob 3.5s ease-in-out infinite;
+  --animate-gallop: gallop 1.6s ease-in-out infinite;
+  --animate-twinkle: twinkle 2.6s ease-in-out infinite;
+
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes gallop {
+    0%,
+    100% {
+      transform: rotate(-4deg) translateY(0);
+    }
+    50% {
+      transform: rotate(3deg) translateY(-8px);
+    }
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(0.75);
+      opacity: 0.6;
+    }
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-nunito);
+  --font-display: var(--font-fredoka);
+}
+
+body {
+  background-color: var(--color-cream);
+  background-image: radial-gradient(var(--color-blush) 2px, transparent 2px);
+  background-size: 26px 26px;
+  color: var(--color-plum);
+}
