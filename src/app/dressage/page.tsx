@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { CategoryPage } from "@/components/CategoryPage";
 import { HorseLoader } from "@/components/HorseLoader";
+import { DressagePage } from "./_components/DressagePage";
 
 export const metadata: Metadata = {
   title: "Dressur – Kjepphest-stevne",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <Suspense fallback={<HorseLoader />}>
-      <CategoryPage slug="dressage" />
+      <DressagePage />
     </Suspense>
   );
 }

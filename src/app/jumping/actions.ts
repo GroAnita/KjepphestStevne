@@ -2,54 +2,9 @@
 
 import { refresh } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
-import { getJumpingClasses, MAX_OBSTACLES } from "@/lib/jumping";
+import { MAX_OBSTACLES } from "@/lib/jumping-shared";
 import { createClient } from "@/lib/supabase/server";
-
-export type FormState = { error?: string; success?: string };
-
-export async function enterRider(
-  _prev: FormState,
-  formData: FormData,
-): Promise<FormState> {
-  const riderName = String(formData.get("rider_name") ?? "").trim();
-  const horseName = String(formData.get("horse_name") ?? "").trim();
-  const age = Number(formData.get("rider_age"));
-
-  if (!riderName || !horseName || !age) {
-    return { error: "Fyll inn navn, alder og navnet på kjepphesten." };
-  }
-
-  // The class follows from the rider's age.
-  const classes = await getJumpingClasses();
-  const riderClass = classes.find(
-    (c) => age >= c.min_age && age <= c.max_age,
-  );
-  if (!riderClass) {
-    return { error: "Sprang er for ryttere mellom 4 og 16 år." };
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase.from("entries").insert({
-    class_id: riderClass.id,
-    rider_name: riderName,
-    rider_age: age,
-    horse_name: horseName,
-  });
-  if (error) {
-    return { error: "Påmeldingen gikk ikke. Prøv igjen om litt." };
-  }
-
-  refresh();
-  return {
-    success: `${riderName} og ${horseName} er påmeldt i ${riderClass.name}!`,
-  };
-}
-
-export async function withdrawEntry(entryId: string) {
-  const supabase = await createClient();
-  await supabase.from("entries").delete().eq("id", entryId);
-  refresh();
-}
+import type { FormState } from "../entry-actions";
 
 function parseFault(value: FormDataEntryValue | null): number | null {
   const text = String(value ?? "").trim();

@@ -1,17 +1,11 @@
+import { getClasses } from "@/lib/competition";
 import { createClient } from "@/lib/supabase/server";
 import type { JumpingClass, JumpingEntry } from "./jumping-shared";
 
 export * from "./jumping-shared";
 
-export async function getJumpingClasses(): Promise<JumpingClass[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("classes")
-    .select("id, name, min_age, max_age, ranked")
-    .eq("discipline", "jumping")
-    .order("sort_order");
-  if (error) throw error;
-  return data;
+export function getJumpingClasses(): Promise<JumpingClass[]> {
+  return getClasses("jumping");
 }
 
 // Entries the current user may see: their own, or all of them for admins.

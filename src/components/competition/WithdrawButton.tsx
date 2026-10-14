@@ -1,6 +1,6 @@
 "use client";
 
-import { withdrawEntry } from "../actions";
+import { withdrawEntry } from "@/app/entry-actions";
 
 export function WithdrawButton({
   entryId,

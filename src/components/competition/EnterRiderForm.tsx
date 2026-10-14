@@ -2,15 +2,21 @@
 
 import { useActionState, useState } from "react";
 import { Notice, SubmitButton } from "@/components/FormBits";
-import type { JumpingClass } from "@/lib/jumping-shared";
-import { enterRider, type FormState } from "../actions";
+import { enterRider, type FormState } from "@/app/entry-actions";
+import type { CompetitionClass, Discipline } from "@/lib/competition-shared";
 
 const inputClass =
   "w-full rounded-2xl border-2 border-lilac-soft bg-white px-4 py-3 text-base outline-none transition focus:border-bubblegum focus:ring-4 focus:ring-blush";
 
-export function EnterRiderForm({ classes }: { classes: JumpingClass[] }) {
+export function EnterRiderForm({
+  discipline,
+  classes,
+}: {
+  discipline: Discipline;
+  classes: CompetitionClass[];
+}) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(
-    enterRider,
+    enterRider.bind(null, discipline),
     {},
   );
   const [age, setAge] = useState("");
@@ -21,7 +27,12 @@ export function EnterRiderForm({ classes }: { classes: JumpingClass[] }) {
     setHandled(state);
     if (state.success) setAge("");
   }
-  const ages = Array.from({ length: 13 }, (_, i) => i + 4);
+  const minAge = Math.min(...classes.map((c) => c.min_age));
+  const maxAge = Math.max(...classes.map((c) => c.max_age));
+  const ages = Array.from(
+    { length: maxAge - minAge + 1 },
+    (_, i) => i + minAge,
+  );
   const riderClass = classes.find(
     (c) => Number(age) >= c.min_age && Number(age) <= c.max_age,
   );
@@ -60,7 +71,9 @@ export function EnterRiderForm({ classes }: { classes: JumpingClass[] }) {
           <span className="font-display text-lg font-medium">Klasse</span>
           <p
             aria-live="polite"
-            className="rounded-2xl bg-mint-soft px-4 py-3 font-display text-lg font-semibold"
+            className={`rounded-2xl px-4 py-3 font-display text-lg font-semibold ${
+              discipline === "jumping" ? "bg-mint-soft" : "bg-lilac-soft"
+            }`}
           >
             {riderClass ? riderClass.name : "Velges ut fra alder"}
           </p>

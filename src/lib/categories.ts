@@ -19,6 +19,3 @@ export const categories: Category[] = [
   },
 ];
 
-export function getCategory(slug: CategorySlug): Category {
-  return categories.find((c) => c.slug === slug)!;
-}

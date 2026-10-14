@@ -1,26 +1,15 @@
 // Jumping types and helpers that are safe to use in both server and browser code.
 
-export type JumpingClass = {
-  id: string;
-  name: string;
-  min_age: number;
-  max_age: number;
-  ranked: boolean;
-};
+import type { BaseEntry, CompetitionClass } from "./competition-shared";
+
+export type JumpingClass = CompetitionClass;
 
 export type JumpingResult = {
   faults: number[];
   time_seconds: number | null;
 };
 
-export type JumpingEntry = {
-  id: string;
-  class_id: string;
-  rider_name: string;
-  rider_age: number;
-  horse_name: string;
-  result: JumpingResult | null;
-};
+export type JumpingEntry = BaseEntry & { result: JumpingResult | null };
 
 export const MAX_OBSTACLES = 9;
 

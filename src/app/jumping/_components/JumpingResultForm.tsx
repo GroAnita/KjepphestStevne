@@ -6,7 +6,8 @@ import {
   MAX_OBSTACLES,
   type JumpingResult,
 } from "@/lib/jumping-shared";
-import { saveJumpingResult, type FormState } from "../actions";
+import type { FormState } from "@/app/entry-actions";
+import { saveJumpingResult } from "../actions";
 
 export function JumpingResultForm({
   entryId,
