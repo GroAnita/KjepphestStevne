@@ -37,3 +37,10 @@ export async function requireUser(): Promise<CurrentUser> {
   if (!user) redirect("/login");
   return user;
 }
+
+// For admin-only pages: sends regular users to their own page.
+export async function requireAdmin(): Promise<CurrentUser> {
+  const user = await requireUser();
+  if (user.role !== "admin") redirect("/");
+  return user;
+}

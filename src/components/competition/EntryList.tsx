@@ -1,11 +1,7 @@
 import type { ReactNode } from "react";
 import { Star } from "@/components/Doodles";
-import type {
-  BaseEntry,
-  CompetitionClass,
-  Discipline,
-} from "@/lib/competition-shared";
-import { EnterRiderForm } from "./EnterRiderForm";
+import type { BaseEntry } from "@/lib/competition-shared";
+import { EnterRiderForm, type DisciplineOption } from "./EnterRiderForm";
 import { WithdrawButton } from "./WithdrawButton";
 
 export function ResultPill({
@@ -87,56 +83,14 @@ export function EmptyClass({ name }: { name: string }) {
   );
 }
 
-// A regular user's own entries, with results once they are in.
-export function MyEntries<E extends BaseEntry & { result: unknown }>({
-  classes,
-  entries,
-  renderResult,
-}: {
-  classes: CompetitionClass[];
-  entries: E[];
-  renderResult: (entry: E) => ReactNode;
-}) {
-  if (entries.length === 0) return null;
-  const className = (id: string) => classes.find((c) => c.id === id)?.name;
-
-  return (
-    <section className="mt-10">
-      <h2 className="mb-4 font-display text-3xl font-semibold">
-        Dine påmeldinger
-      </h2>
-      <ul className="flex flex-col gap-3">
-        {entries.map((entry) => (
-          <li
-            key={entry.id}
-            className="flex flex-wrap items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-[0_8px_24px_-14px_rgba(75,44,85,0.4)]"
-          >
-            <span className="min-w-0 flex-1">
-              <span className="block font-display text-lg font-semibold">
-                {entry.rider_name}
-              </span>
-              <span className="block text-sm text-plum-soft">
-                {className(entry.class_id)} · {entry.rider_age} år ·{" "}
-                {entry.horse_name}
-              </span>
-            </span>
-            {renderResult(entry)}
-            {!entry.result && (
-              <WithdrawButton entryId={entry.id} riderName={entry.rider_name} />
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 export function EnterRiderSection({
-  discipline,
-  classes,
+  options,
+  feeNok,
+  description = "Klassen velges automatisk ut fra rytterens alder.",
 }: {
-  discipline: Discipline;
-  classes: CompetitionClass[];
+  options: DisciplineOption[];
+  feeNok?: number;
+  description?: string;
 }) {
   return (
     <section className="mt-10 rounded-[2rem] bg-white p-2 shadow-[0_12px_40px_-12px_rgba(224,69,127,0.35)]">
@@ -144,10 +98,8 @@ export function EnterRiderSection({
         <h2 className="font-display text-3xl font-semibold text-berry">
           Meld på en rytter
         </h2>
-        <p className="mb-5 mt-1 text-plum-soft">
-          Klassen velges automatisk ut fra rytterens alder.
-        </p>
-        <EnterRiderForm discipline={discipline} classes={classes} />
+        <p className="mb-5 mt-1 text-plum-soft">{description}</p>
+        <EnterRiderForm options={options} feeNok={feeNok} />
       </div>
     </section>
   );

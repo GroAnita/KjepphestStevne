@@ -65,17 +65,16 @@ export function formatPercent(percent: number): string {
 
 // Highest percentage first. On a tie, the time closest to the ideal time
 // wins. Riders without a result go last.
-export function rankDressage(
-  entries: DressageEntry[],
+export function rankDressage<E extends { result: DressageResult | null }>(
+  entries: E[],
   dressageClass: CompetitionClass,
-): DressageEntry[] {
+): E[] {
   const ideal = dressageClass.ideal_time_seconds;
-  const distance = (e: DressageEntry) =>
+  const distance = (e: E) =>
     ideal != null && e.result?.time_seconds != null
       ? Math.abs(e.result.time_seconds - ideal)
       : Infinity;
-  const percent = (e: DressageEntry) =>
-    dressageScore(e.result!, dressageClass).percent;
+  const percent = (e: E) => dressageScore(e.result!, dressageClass).percent;
 
   return [...entries].sort((a, b) => {
     if (!a.result || !b.result) return a.result ? -1 : b.result ? 1 : 0;

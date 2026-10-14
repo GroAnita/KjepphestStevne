@@ -36,6 +36,12 @@ export type BaseEntry = {
   rider_name: string;
   rider_age: number;
   horse_name: string;
+  paid_at: string | null;
+};
+
+export const disciplineNames: Record<Discipline, string> = {
+  jumping: "Sprang",
+  dressage: "Dressur",
 };
 
 export const ageRange = (c: CompetitionClass) => `${c.min_age}–${c.max_age} år`;
@@ -57,6 +63,10 @@ export function parseDuration(text: string): number | null {
 export function formatDuration(totalSeconds: number): string {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds - minutes * 60;
-  const [whole, decimals] = seconds.toFixed(2).replace(/0+$/, "").replace(/\.$/, "").split(".");
+  const [whole, decimals] = seconds
+    .toFixed(2)
+    .replace(/0+$/, "")
+    .replace(/\.$/, "")
+    .split(".");
   return `${minutes}:${whole.padStart(2, "0")}${decimals ? `,${decimals}` : ""}`;
 }

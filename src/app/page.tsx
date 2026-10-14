@@ -5,8 +5,10 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { FloatingDoodles, Meadow } from "@/components/Doodles";
 import { HobbyHorse } from "@/components/HobbyHorse";
 import { HorseLoader } from "@/components/HorseLoader";
+import { MyPage } from "@/components/my-page/MyPage";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth";
 import { categories } from "@/lib/categories";
+import { getPaymentGroups } from "@/lib/payments";
 
 export default function Home() {
   return (
@@ -18,11 +20,19 @@ export default function Home() {
 
 async function HomeContent() {
   const user = await getCurrentUser();
-  return user ? <Dashboard user={user} /> : <Welcome />;
+  if (!user) return <Welcome />;
+  return user.role === "admin" ? (
+    <AdminDashboard user={user} />
+  ) : (
+    <MyPage user={user} />
+  );
 }
 
-function Dashboard({ user }: { user: CurrentUser }) {
+async function AdminDashboard({ user }: { user: CurrentUser }) {
   const firstName = user.name.split(" ")[0];
+  const waiting = (await getPaymentGroups()).flatMap((g) =>
+    g.entries.filter((e) => e.status === "reported"),
+  ).length;
   return (
     <AppShell user={user}>
       <div className="text-center sm:text-left">
@@ -30,11 +40,25 @@ function Dashboard({ user }: { user: CurrentUser }) {
           Hei, {firstName}!
         </h1>
         <p className="mt-2 text-lg text-plum-soft">
-          {user.role === "admin"
-            ? "Du er administrator. Velg en kategori for å styre klassene."
-            : "Velg en kategori for å se klassene og melde deg på."}
+          Du er administrator. Velg en kategori for å styre klassene.
         </p>
       </div>
+      {waiting > 0 && (
+        <Link
+          href="/payments"
+          className="mt-6 flex items-center justify-between gap-3 rounded-2xl bg-sunny/50 px-5 py-4 font-semibold transition hover:bg-sunny/70"
+        >
+          <span>
+            {waiting === 1
+              ? "1 påmelding venter"
+              : `${waiting} påmeldinger venter`}{" "}
+            på at du bekrefter betalingen.
+          </span>
+          <span aria-hidden="true" className="text-2xl text-berry">
+            →
+          </span>
+        </Link>
+      )}
       <div className="mt-8 grid gap-6 sm:grid-cols-2">
         {categories.map((category) => (
           <CategoryCard key={category.slug} category={category} />

@@ -1,6 +1,7 @@
 import type { CurrentUser } from "@/lib/auth";
 import { signOut } from "@/app/(auth)/actions";
 import { Logo } from "./Logo";
+import { NavLinks, type NavLink } from "./NavLinks";
 
 const flagColors = [
   "var(--color-bubblegum)",
@@ -28,6 +29,17 @@ function Bunting() {
     </div>
   );
 }
+
+const userLinks: NavLink[] = [
+  { href: "/", label: "Min side" },
+  { href: "/results", label: "Resultater" },
+];
+
+const adminLinks: NavLink[] = [
+  { href: "/", label: "Oversikt" },
+  { href: "/payments", label: "Betalinger" },
+  { href: "/results", label: "Resultater" },
+];
 
 export function SiteHeader({ user }: { user: CurrentUser }) {
   const initial = user.name.trim().charAt(0).toUpperCase();
@@ -58,6 +70,9 @@ export function SiteHeader({ user }: { user: CurrentUser }) {
             </button>
           </form>
         </div>
+      </div>
+      <div className="px-4 pb-2">
+        <NavLinks links={user.role === "admin" ? adminLinks : userLinks} />
       </div>
       <Bunting />
     </header>

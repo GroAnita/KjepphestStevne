@@ -18,4 +18,3 @@ export const categories: Category[] = [
     tagline: "Vis frem de fineste og flotteste bevegelsene!",
   },
 ];
-

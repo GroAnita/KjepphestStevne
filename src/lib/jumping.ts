@@ -16,7 +16,7 @@ export async function getJumpingEntries(
   const { data, error } = await supabase
     .from("entries")
     .select(
-      "id, class_id, rider_name, rider_age, horse_name, jumping_results (faults, time_seconds)",
+      "id, class_id, rider_name, rider_age, horse_name, paid_at, jumping_results (faults, time_seconds)",
     )
     .in("class_id", classIds)
     .order("created_at");

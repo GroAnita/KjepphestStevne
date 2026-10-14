@@ -6,10 +6,9 @@ import {
   EmptyClass,
   EnterRiderSection,
   EntryRow,
-  MyEntries,
   ResultPill,
 } from "@/components/competition/EntryList";
-import { requireUser } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import {
   ageRange,
   formatDuration,
@@ -28,10 +27,9 @@ import { DressageResultForm } from "./DressageResultForm";
 import { ProgramSettingsForm } from "./ProgramSettingsForm";
 
 export async function DressagePage() {
-  const user = await requireUser();
+  const user = await requireAdmin();
   const classes = await getDressageClasses();
   const entries = await getDressageEntries(classes.map((c) => c.id));
-  const isAdmin = user.role === "admin";
 
   return (
     <AppShell user={user}>
@@ -98,39 +96,39 @@ export async function DressagePage() {
         Det er lov å få lest opp programmet i alle aldersgrupper.
       </p>
 
-      {isAdmin ? (
-        <section className="mt-10">
-          <h2 className="mb-4 font-display text-3xl font-semibold">
-            Påmeldte og resultater
-          </h2>
-          <ClassTabs
-            accent="lilac"
-            tabs={classes.map((c) => {
-              const inClass = entries.filter((e) => e.class_id === c.id);
-              return {
-                id: c.id,
-                label: c.name,
-                sublabel: ageRange(c),
-                count: inClass.length,
-                panel: <AdminClassPanel dressageClass={c} entries={inClass} />,
-              };
-            })}
-          />
-        </section>
-      ) : (
-        <MyEntries
-          classes={classes}
-          entries={entries}
-          renderResult={(entry) => (
-            <DressageResultPill
-              entry={entry}
-              program={classes.find((c) => c.id === entry.class_id)!}
-            />
-          )}
+      <section className="mt-10">
+        <h2 className="mb-4 font-display text-3xl font-semibold">
+          Påmeldte og resultater
+        </h2>
+        <p className="-mt-2 mb-4 text-plum-soft">
+          Her vises de som har betalt. Ubetalte påmeldinger finner du under{" "}
+          <Link href="/payments" className="font-bold text-berry underline">
+            Betalinger
+          </Link>
+          .
+        </p>
+        <ClassTabs
+          accent="lilac"
+          tabs={classes.map((c) => {
+            // Only paid entries count as entered; the rest wait under Betalinger.
+            const inClass = entries.filter(
+              (e) => e.class_id === c.id && e.paid_at,
+            );
+            return {
+              id: c.id,
+              label: c.name,
+              sublabel: ageRange(c),
+              count: inClass.length,
+              panel: <AdminClassPanel dressageClass={c} entries={inClass} />,
+            };
+          })}
         />
-      )}
+      </section>
 
-      <EnterRiderSection discipline="dressage" classes={classes} />
+      <EnterRiderSection
+        options={[{ discipline: "dressage", label: "Dressur", classes }]}
+        description="Ryttere du melder på her, regnes som betalt (for eksempel påmelding på selve dagen)."
+      />
     </AppShell>
   );
 }

@@ -17,7 +17,7 @@ export async function getDressageEntries(
   const { data, error } = await supabase
     .from("entries")
     .select(
-      "id, class_id, rider_name, rider_age, horse_name, dressage_results (scores, errors, collective, time_seconds, comment)",
+      "id, class_id, rider_name, rider_age, horse_name, paid_at, dressage_results (scores, errors, collective, time_seconds, comment)",
     )
     .in("class_id", classIds)
     .order("created_at");

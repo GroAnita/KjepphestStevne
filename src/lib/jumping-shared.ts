@@ -18,7 +18,9 @@ export function totalFaults(result: JumpingResult | null): number {
 }
 
 // Fewest faults first, then fastest time. Riders without a time go last.
-export function rankEntries(entries: JumpingEntry[]): JumpingEntry[] {
+export function rankEntries<E extends { result: JumpingResult | null }>(
+  entries: E[],
+): E[] {
   return [...entries].sort((a, b) => {
     const aDone = a.result?.time_seconds != null;
     const bDone = b.result?.time_seconds != null;
