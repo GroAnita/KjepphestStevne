@@ -58,7 +58,7 @@ export function FloatingDoodles() {
       <Star className="absolute right-[14%] top-[38%] hidden size-6 text-mint motion-safe:animate-twinkle sm:block" />
       <Heart className="absolute right-[6%] top-[62%] hidden size-7 text-lilac motion-safe:animate-bob sm:block" />
       <Horseshoe className="absolute right-[4%] top-[26%] hidden size-8 rotate-[15deg] text-bubblegum md:block" />
-      <Star className="absolute left-[22%] top-[20%] hidden size-5 text-bubblegum motion-safe:animate-twinkle md:block" />
+      <Star className="absolute left-[4%] top-[70%] hidden size-5 text-bubblegum motion-safe:animate-twinkle md:block" />
     </div>
   );
 }

@@ -5,9 +5,9 @@ export function Logo() {
   return (
     <Link
       href="/"
-      className="inline-flex items-center gap-2 font-display text-2xl font-semibold text-berry"
+      className="inline-flex items-center gap-2 font-display text-xl font-semibold sm:text-2xl text-berry"
     >
-      <Horseshoe className="size-7 rotate-180 text-bubblegum" />
+      <Horseshoe className="size-6 shrink-0 rotate-180 sm:size-7 text-bubblegum" />
       Kjepphest-stevne
     </Link>
   );
