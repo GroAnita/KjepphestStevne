@@ -14,6 +14,7 @@ import {
 } from "@/lib/my-entries";
 import { getSettings } from "@/lib/settings";
 import { ReportPaymentButton } from "./ReportPaymentButton";
+import { VippsCheckout } from "./VippsCheckout";
 
 const statusLook: Record<PaymentStatus, { label: string; className: string }> =
   {
@@ -63,9 +64,15 @@ export async function MyPage({ user }: { user: CurrentUser }) {
                 .join(", ")}
               )
             </p>
+            <div className="mt-5">
+              <VippsCheckout total={total} />
+            </div>
             {settings.vipps_number ? (
-              <>
-                <ol className="mt-4 flex list-decimal flex-col gap-1 pl-5 text-lg">
+              <div className="mt-5">
+                <h3 className="font-display text-xl font-semibold">
+                  Slik betaler du nå
+                </h3>
+                <ol className="mt-2 flex list-decimal flex-col gap-1 pl-5 text-lg">
                   <li>
                     Vipps <strong>{total} kr</strong> til{" "}
                     <strong className="font-display text-xl text-berry">
@@ -81,7 +88,7 @@ export async function MyPage({ user }: { user: CurrentUser }) {
                     total={total}
                   />
                 </div>
-              </>
+              </div>
             ) : (
               <p className="mt-4 font-semibold">
                 Betalingsinformasjon kommer snart. Påmeldingen din er lagret.

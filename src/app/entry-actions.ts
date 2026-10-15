@@ -30,18 +30,31 @@ export async function enterRider(
     return { error: "Velg Sprang, Dressur eller begge." };
   }
 
-  // The class follows from the rider's age.
+  // Children fit exactly one class by age. Adults (senior classes) pick
+  // one or more heights or programs themselves.
   const picked = [];
   for (const discipline of disciplines) {
-    const riderClass = (await getClasses(discipline)).find(
+    const matches = (await getClasses(discipline)).filter(
       (c) => age >= c.min_age && age <= c.max_age,
     );
-    if (!riderClass) {
+    if (matches.length === 0) {
       return {
         error: `Det finnes ingen klasse i ${disciplineNames[discipline]} for ${age} år.`,
       };
     }
-    picked.push({ discipline, riderClass });
+    const chosenIds = formData.getAll(`class_${discipline}`);
+    const riderClasses =
+      matches.length === 1
+        ? matches
+        : matches.filter((c) => chosenIds.includes(c.id));
+    if (riderClasses.length === 0) {
+      return {
+        error: `Velg minst én klasse i ${disciplineNames[discipline]}.`,
+      };
+    }
+    for (const riderClass of riderClasses) {
+      picked.push({ discipline, riderClass });
+    }
   }
 
   const supabase = await createClient();
@@ -58,13 +71,14 @@ export async function enterRider(
   }
 
   refresh();
-  const where = picked
-    .map(({ discipline, riderClass }) =>
+  // "Sprang Senior 40 cm, Sprang Senior 60 cm og Dressur Senior MB"
+  const where = new Intl.ListFormat("nb", { type: "conjunction" }).format(
+    picked.map(({ discipline, riderClass }) =>
       fixedDiscipline
         ? riderClass.name
         : `${disciplineNames[discipline]} ${riderClass.name}`,
-    )
-    .join(" og ");
+    ),
+  );
   return {
     success: `${riderName} og ${horseName} er lagt til i ${where}!`,
   };

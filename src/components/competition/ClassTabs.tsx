@@ -12,12 +12,12 @@ export type Tab = {
 
 const accents = {
   mint: {
-    selected: "border-mint bg-white",
+    selected: "border-mint bg-white shadow-[0_4px_0_var(--color-mint)]",
     idle: "border-transparent bg-mint-soft/70 hover:bg-mint-soft",
     panel: "border-mint",
   },
   lilac: {
-    selected: "border-lilac bg-white",
+    selected: "border-lilac bg-white shadow-[0_4px_0_var(--color-lilac)]",
     idle: "border-transparent bg-lilac-soft/70 hover:bg-lilac-soft",
     panel: "border-lilac",
   },
@@ -36,7 +36,11 @@ export function ClassTabs({
 
   return (
     <div>
-      <div role="tablist" aria-label="Klasser" className="grid grid-cols-3 gap-2 pt-2">
+      <div
+        role="tablist"
+        aria-label="Klasser"
+        className="grid grid-cols-3 gap-2 pt-2 lg:grid-cols-6"
+      >
         {tabs.map((tab) => {
           const selected = tab.id === active;
           return (
@@ -47,11 +51,11 @@ export function ClassTabs({
               aria-selected={selected}
               aria-controls={`${baseId}-panel-${tab.id}`}
               onClick={() => setActive(tab.id)}
-              className={`relative flex flex-col items-center rounded-t-3xl border-2 border-b-0 px-2 pb-2 pt-3 transition ${
+              className={`relative flex flex-col items-center justify-center rounded-2xl border-2 px-2 pb-2 pt-3 text-center transition ${
                 selected ? colors.selected : colors.idle
               }`}
             >
-              <span className="whitespace-nowrap font-display text-lg font-semibold sm:text-2xl">
+              <span className="font-display text-base font-semibold leading-tight sm:text-xl">
                 {tab.label}
               </span>
               <span
@@ -76,7 +80,7 @@ export function ClassTabs({
           id={`${baseId}-panel-${tab.id}`}
           aria-labelledby={`${baseId}-tab-${tab.id}`}
           hidden={tab.id !== active}
-          className={`-mt-0.5 rounded-b-3xl rounded-tr-3xl border-2 bg-white p-3 sm:p-5 ${colors.panel}`}
+          className={`mt-3 rounded-3xl border-2 bg-white p-3 sm:p-5 ${colors.panel}`}
         >
           {tab.panel}
         </div>
